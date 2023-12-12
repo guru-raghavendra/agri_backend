@@ -14,4 +14,4 @@ class GoogleAuthView(APIView):
         if token != 'INVALID':
             return Response({'message': 'success', 'token': token}, status=status.HTTP_200_OK)
         else:
-            return Response({'message': 'Invalid token'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'message': 'Please try logging after sometime'}, status=status.HTTP_400_BAD_REQUEST)

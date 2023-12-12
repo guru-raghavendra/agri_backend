@@ -7,7 +7,6 @@ from django.db import models
 from model_utils.models import TimeStampedModel
 
 class User(TimeStampedModel):
-    # Define language choices
     ENGLISH = 'EN'
     KANNADA = 'KA'
     LANGUAGE_CHOICES = [
