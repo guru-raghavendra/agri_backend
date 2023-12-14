@@ -13,8 +13,9 @@ class GoogleAuthView(APIView):
         if token != 'INVALID':
             return Response({'message': 'success', 'token': token}, status=status.HTTP_200_OK)
         else:
-            return Response({'message': 'Please try logging after sometime'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'message': 'Please try logging after sometime, invalid token'}, status=status.HTTP_400_BAD_REQUEST)
 
+#may have to depricate this
 class TokenRegenerationView(APIView):
     def put(self, request, *args, **kwargs):
         old_token_key = request.headers.get('Authorization')
