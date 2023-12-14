@@ -1,23 +1,20 @@
-from django.shortcuts import render
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+from rest_framework.permissions import IsAuthenticated
 
-# Create your views here.
+from authentication.authentication import TokenAuthentication
+from .models import Post
+from .serializers import PostSerializer
 
-#create new post, 
+class CreatePostView(APIView):
 
-''' 
-per day max number of posts
-AWS S3 Bucket Policy for size,
-if already sent presigned url for the user, and not yet uploded and sent back the uploaded url, give the same presigned url
-'''
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
 
-# import boto3
-# from django.conf import settings
-# from django.http import JsonResponse
-
-# def generate_presigned_url(request):
-#     s3_client = boto3.client('s3', aws_access_key_id=settings.AWS_ACCESS_KEY_ID, aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY)
-#     bucket_name = 'your-bucket-name'
-#     object_name = 'desired-object-name-in-s3'
-#     presigned_url = s3_client.generate_presigned_url('put_object', Params={'Bucket': bucket_name, 'Key': object_name}, ExpiresIn=3600)
-#     return JsonResponse({'url': presigned_url})
-
+    def post(self, request, format=None):
+        serializer = PostSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save(user=request.user)
+            return Response({"message":"Success"}, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
